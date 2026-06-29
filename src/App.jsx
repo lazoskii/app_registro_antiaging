@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import Navbar from './components/Navbar';
+import Home from './pages/Home';
 import Supplements from './pages/Supplements';
 import CheckIn from './pages/CheckIn';
 import Calendar from './pages/Calendar';
 import './App.css';
 
 export default function App() {
-  const [page, setPage] = useState('checkin');
+  const [page, setPage] = useState('home');
 
   return (
     <div className="app">
@@ -14,6 +15,7 @@ export default function App() {
         <h1>🐭 Mouse Supplements</h1>
       </header>
       <main>
+        {page === 'home' && <Home setPage={setPage} />}
         {page === 'supplements' && <Supplements />}
         {page === 'checkin' && <CheckIn />}
         {page === 'calendar' && <Calendar />}
