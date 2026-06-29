@@ -1,10 +1,16 @@
 import { useState } from 'react';
-import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Supplements from './pages/Supplements';
 import CheckIn from './pages/CheckIn';
 import Calendar from './pages/Calendar';
 import './App.css';
+
+const titles = {
+  home: '🐭 Mouse Supplements',
+  supplements: '💊 Suplementos',
+  checkin: '✅ Check-in',
+  calendar: '📅 Calendário',
+};
 
 export default function App() {
   const [page, setPage] = useState('home');
@@ -12,7 +18,10 @@ export default function App() {
   return (
     <div className="app">
       <header>
-        <h1>🐭 Mouse Supplements</h1>
+        {page !== 'home' && (
+          <button className="back-btn" onClick={() => setPage('home')}>‹</button>
+        )}
+        <h1>{titles[page]}</h1>
       </header>
       <main>
         {page === 'home' && <Home setPage={setPage} />}
@@ -20,7 +29,6 @@ export default function App() {
         {page === 'checkin' && <CheckIn />}
         {page === 'calendar' && <Calendar />}
       </main>
-      <Navbar page={page} setPage={setPage} />
     </div>
   );
 }
