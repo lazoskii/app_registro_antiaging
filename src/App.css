@@ -233,3 +233,18 @@ li button {
   font-size: 0.9rem;
   cursor: default;
 }
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.cancel-btn {
+  padding: 10px;
+  background: #eee;
+  color: #444;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
