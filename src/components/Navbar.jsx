@@ -1,10 +1,9 @@
 export default function Navbar({ page, setPage }) {
+  if (page === 'home') return null;
+
   return (
-    <nav>
-      <button className={page === 'home' ? 'active' : ''} onClick={() => setPage('home')}>🏠 Início</button>
-      <button className={page === 'supplements' ? 'active' : ''} onClick={() => setPage('supplements')}>💊 Suplementos</button>
-      <button className={page === 'checkin' ? 'active' : ''} onClick={() => setPage('checkin')}>✅ Check-in</button>
-      <button className={page === 'calendar' ? 'active' : ''} onClick={() => setPage('calendar')}>📅 Calendário</button>
+    <nav className="back-nav">
+      <button onClick={() => setPage('home')}>‹ Voltar</button>
     </nav>
   );
 }
