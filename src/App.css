@@ -248,3 +248,60 @@ li button {
   font-size: 0.95rem;
   cursor: pointer;
 }
+
+.calendar-legend {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+  font-size: 0.75rem;
+  color: #666;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.legend-dot.full { background: #2d6a4f; }
+.legend-dot.partial { background: #74c69d; }
+.legend-dot.low { background: #d8f3dc; }
+
+.day-cell {
+  flex-direction: column;
+  gap: 2px;
+}
+
+.day-number {
+  font-size: 0.85rem;
+}
+
+.day-pct {
+  font-size: 0.6rem;
+  color: #2d6a4f;
+  font-weight: bold;
+}
+
+.day-full {
+  background: #2d6a4f;
+  color: white;
+}
+
+.day-full .day-pct {
+  color: white;
+}
+
+.day-partial {
+  background: #74c69d;
+}
+
+.day-low {
+  background: #d8f3dc;
+}

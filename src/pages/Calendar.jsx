@@ -4,6 +4,7 @@ import db from '../db/database';
 export default function Calendar() {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [logsMap, setLogsMap] = useState({});
+  const [totalSupplements, setTotalSupplements] = useState(0);
   const [selectedDay, setSelectedDay] = useState(null);
   const [dayDetail, setDayDetail] = useState([]);
 
@@ -16,6 +17,8 @@ export default function Calendar() {
     const month = String(currentDate.getMonth() + 1).padStart(2, '0');
     const prefix = `${year}-${month}`;
     const logs = await db.logs.filter(l => l.date.startsWith(prefix)).toArray();
+    const total = await db.supplements.count();
+    setTotalSupplements(total);
     const map = {};
     logs.forEach(l => {
       if (!map[l.date]) map[l.date] = 0;
@@ -48,6 +51,14 @@ export default function Calendar() {
     setSelectedDay(null);
   }
 
+  function getDayColor(count) {
+    if (!count || totalSupplements === 0) return '';
+    const pct = count / totalSupplements;
+    if (pct === 1) return 'day-full';
+    if (pct >= 0.5) return 'day-partial';
+    return 'day-low';
+  }
+
   const year = currentDate.getFullYear();
   const month = String(currentDate.getMonth() + 1).padStart(2, '0');
   const monthName = currentDate.toLocaleString('pt-BR', { month: 'long', year: 'numeric' });
@@ -60,22 +71,40 @@ export default function Calendar() {
         <span>{monthName}</span>
         <button onClick={() => changeMonth(1)}>▶</button>
       </div>
+
+      <div className="calendar-legend">
+        <span className="legend-item"><span className="legend-dot full" />100%</span>
+        <span className="legend-item"><span className="legend-dot partial" />50%+</span>
+        <span className="legend-item"><span className="legend-dot low" />Parcial</span>
+      </div>
+
       <div className="calendar-grid">
-        {['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'].map(d => <div key={d} className="day-label">{d}</div>)}
+        {['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'].map(d => (
+          <div key={d} className="day-label">{d}</div>
+        ))}
         {getDaysInMonth().map((day, i) => {
           const dateStr = day ? `${year}-${month}-${String(day).padStart(2, '0')}` : null;
-          const hasLog = dateStr && logsMap[dateStr];
+          const count = dateStr ? logsMap[dateStr] : 0;
+          const colorClass = getDayColor(count);
           return (
             <div
               key={i}
-              className={`day-cell ${hasLog ? 'has-log' : ''} ${selectedDay === dateStr ? 'selected' : ''} ${!day ? 'empty' : ''}`}
+              className={`day-cell ${colorClass} ${selectedDay === dateStr ? 'selected' : ''} ${!day ? 'empty' : ''}`}
               onClick={() => day && selectDay(dateStr)}
             >
-              {day}
+              {day && (
+                <>
+                  <span className="day-number">{day}</span>
+                  {count > 0 && totalSupplements > 0 && (
+                    <span className="day-pct">{Math.round(count / totalSupplements * 100)}%</span>
+                  )}
+                </>
+              )}
             </div>
           );
         })}
       </div>
+
       {selectedDay && (
         <div className="day-detail">
           <h3>{selectedDay}</h3>
